@@ -18,7 +18,7 @@ t_test = targets[N_TRAIN:]
 
 
 index1990 =  np.argmax(values[:,0])
-hamprint "highest child mortality rate in 1990: "+ countries[index1990] +" rate: "+ str(values[index1990,0])
+print "highest child mortality rate in 1990: "+ countries[index1990] +" rate: "+ str(values[index1990,0])
 
 index2011 = np.argmax(values[:,1])
 print "highest child mortality rate in 2011: "+ countries[index2011] + " rate: "+ str(values[index2011,0])
