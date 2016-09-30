@@ -16,7 +16,6 @@ x_test = x[N_TRAIN:,:]
 t_train = targets[0:N_TRAIN]
 t_test = targets[N_TRAIN:]
 
-
 index1990 =  np.argmax(values[:,0])
 print "Highest child mortality rate in 1990: "+ countries[index1990] +" rate: "+ str(values[index1990,0])
 
