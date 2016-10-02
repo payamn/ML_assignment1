@@ -32,7 +32,7 @@ def load_unicef_data():
     # Convert to numpy matrix for real.
     values = np.asmatrix(values,dtype='float64')
 
-    # Modify NaN values (missing values).
+    # Modify NaN values (missing values). must be stat
     mean_vals = np.nanmean(values, axis=0)
     inds = np.where(np.isnan(values))
     values[inds] = np.take(mean_vals, inds[1])
