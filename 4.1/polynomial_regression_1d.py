@@ -10,7 +10,7 @@ from numpy.linalg import inv
 def main():
     # Get input data
     (countries, features, values) = a1.load_unicef_data()
-    print features
+
     targets = values[:, 1]
     #x = values[:, 7:]
 
@@ -25,6 +25,8 @@ def main():
         rmsErrorTrain, rmsErorrTest = calculateToPlotPolynomial3(x, targets)
         PlotMatrixRMSErorr.append(rmsErrorTrain[0,0])
         PlotMatrixRMSErorrTest.append(rmsErorrTest[0,0])
+
+
     # Set EW
     # Ew = t_train - (0.5*np.square(PhiTrain))*w
     plotMatrixDegree = np.matrix([[1], [2], [3], [4], [5], [6],[7],[8]])
@@ -47,8 +49,23 @@ def main():
     plt.legend(['Training error', 'Test error'])
     plt.title('Feature 8 to 16')
     #plt.xlabel('Polynomial degree')
+
+    plt.figure(2)
+    for i in range (0,3):
+        plt.subplot(311+i)
+        x_train, t_train, ourTrainValidation, x_test, t_test, wml= getFitPolynomial3(values[:,10+i],targets)
+
+        t1 = np.arange(min(x_test[:,0]), max(x_test[:,0]), 0.1)
+        plt.plot(t1, calCurve(t1,wml),color = "Green")
+        plt.plot(x_train, t_train, 'ro', color="Blue")
+        #plt.plot(x_train, ourTrainValidation, 'k', color="Red")
+        plt.plot(x_test, t_test, 'ro', color="Yellow")
+        plt.legend(['Learned polynomial','Train point', 'Test Point'],bbox_to_anchor=(1.00, 0.73), loc=1, borderaxespad=0)
+
     plt.show()
 
+def calCurve(myX,wml):
+    return wml[0,0] + wml[1,0] * myX + wml[2,0] * myX * myX + wml[3,0] * myX * myX * myX
 
 def RMS(matrixA, matrixB):
     temp = matrixA - matrixB
@@ -91,4 +108,20 @@ def calculateToPlotPolynomial3(x, targets):
     return PlotMatrixRMSErorr, PlotMatrixRMSErorrTest
 
 
+def getFitPolynomial3(x, targets):
+    N_TRAIN = 100;
+    x_train = x[0:N_TRAIN, :]
+    x_test = x[N_TRAIN:, :]
+    t_train = targets[0:N_TRAIN]
+    t_test = targets[N_TRAIN:]
+
+    i = 3
+    PhiTrain = calculateThetaTrainPolynomial(x_train, N_TRAIN, i)
+    PhiTest = calculateThetaTrainPolynomial(x_test, 95, i)
+    # Set W
+    sInverce = np.linalg.pinv(PhiTrain)
+    w = sInverce * t_train
+    ourTrainValidation = PhiTrain * w
+    ourTestValidation= PhiTest * w
+    return x_train,t_train, ourTrainValidation, x_test, t_test,w
 main()
