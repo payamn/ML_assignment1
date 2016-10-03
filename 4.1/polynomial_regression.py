@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-import assignment1 as a1
-import numpy as np
-import math
 import matplotlib.pyplot as plt
-from numpy.linalg import inv
+import numpy as np
+
+import assignment1 as a1
 
 
 def main():

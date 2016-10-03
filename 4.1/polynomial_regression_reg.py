@@ -20,8 +20,9 @@ def main():
     # normalize data
     #
     minAvgRMS = 999999999
-    landa = 0
-    for landa in [0,0.01,0.1,1,10,100,1000,10000]:
+    landas = [0,0.01,0.1,1,10,100,1000,10000]
+    avgErrorForEachL = []
+    for landa in landas:
         start = 0
         step = 10
         avgErrorRMS = 0
@@ -31,14 +32,13 @@ def main():
             avgErrorRMS += PlotMatrixRMSErorr[0,0]
         avgErrorRMS = avgErrorRMS/10
         print avgErrorRMS , landa
+        avgErrorForEachL.append(avgErrorRMS)
+    plt.semilogx(landas,avgErrorForEachL)
+
+    plt.show()
 
 
 
-
-
-
-def calCurve(myX,wml):
-    return wml[0,0] + wml[1,0] * myX + wml[2,0] * myX * myX + wml[3,0] * myX * myX * myX
 
 def setXes(index, x, targets):
 
@@ -49,15 +49,14 @@ def setXes(index, x, targets):
     x_validation = x[index:index + 10,:]
     return x_train, t_train, x_validation, t_validation
 
-def RMSLanda(matrixA, matrixB,w,landa):
+def RMSLanda(matrixA, matrixB,w):
     temp = matrixA - matrixB
     temp = np.square(temp)
     sumTemp = sum(temp)
     sumTemp = sumTemp / 10
     sumTemp = np.sqrt(sumTemp)
  #   print np.square(w)
-    w = (np.square(w)*landa)/2
-    sumTemp = sumTemp + sum(w)
+
     return sumTemp
 
 
@@ -80,7 +79,7 @@ def crossValidationCal(x_train, t_train,landa, x_validation, t_validation ):
     sInverce = np.linalg.inv (landa*np.eye(PhiTrain.shape[1])+ np.transpose(PhiTrain)*PhiTrain) * np.transpose(PhiTrain)
     w = sInverce * t_train
     ourTrainValidation = PhiValidation * w
-    PlotMatrixRMSErorr = RMSLanda(t_validation, ourTrainValidation, w, landa)
+    PlotMatrixRMSErorr = RMSLanda(t_validation, ourTrainValidation, w)
     return PlotMatrixRMSErorr
 
 
